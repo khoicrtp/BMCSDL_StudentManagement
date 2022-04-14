@@ -66,11 +66,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QLBongDaDataSet.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>QLBongDaDataSet.xsd</DependentUpon>
-    </Compile>
     <Compile Include="StudentManagement.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -107,17 +102,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="QLBongDaDataSet.xsc">
-      <DependentUpon>QLBongDaDataSet.xsd</DependentUpon>
-    </None>
-    <None Include="QLBongDaDataSet.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>QLBongDaDataSet.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="QLBongDaDataSet.xss">
-      <DependentUpon>QLBongDaDataSet.xsd</DependentUpon>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

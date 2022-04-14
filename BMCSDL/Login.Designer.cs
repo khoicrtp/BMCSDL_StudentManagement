@@ -32,16 +32,9 @@
             this.button1 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.cAUTHUBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.qLBongDaDataSet = new BMCSDL.QLBongDaDataSet();
             this.textBox2 = new System.Windows.Forms.TextBox();
-            this.cAUTHUBindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.label2 = new System.Windows.Forms.Label();
-            this.cAUTHUTableAdapter = new BMCSDL.QLBongDaDataSetTableAdapters.CAUTHUTableAdapter();
             this.button2 = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.cAUTHUBindingSource)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.qLBongDaDataSet)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.cAUTHUBindingSource1)).BeginInit();
             this.SuspendLayout();
             // 
             // button1
@@ -71,17 +64,7 @@
             this.textBox1.Size = new System.Drawing.Size(274, 22);
             this.textBox1.TabIndex = 2;
             this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
-            // 
-            // cAUTHUBindingSource
-            // 
-            this.cAUTHUBindingSource.DataMember = "CAUTHU";
-            this.cAUTHUBindingSource.DataSource = this.qLBongDaDataSet;
-            // 
-            // qLBongDaDataSet
-            // 
-            this.qLBongDaDataSet.DataSetName = "QLBongDaDataSet";
-            this.qLBongDaDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
-            // 
+
             // textBox2
             // 
             this.textBox2.Location = new System.Drawing.Point(132, 106);
@@ -89,11 +72,7 @@
             this.textBox2.Size = new System.Drawing.Size(274, 22);
             this.textBox2.TabIndex = 3;
             this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
-            // 
-            // cAUTHUBindingSource1
-            // 
-            this.cAUTHUBindingSource1.DataMember = "CAUTHU";
-            this.cAUTHUBindingSource1.DataSource = this.qLBongDaDataSet;
+
             // 
             // label2
             // 
@@ -103,10 +82,6 @@
             this.label2.Size = new System.Drawing.Size(67, 16);
             this.label2.TabIndex = 4;
             this.label2.Text = "Password";
-            // 
-            // cAUTHUTableAdapter
-            // 
-            this.cAUTHUTableAdapter.ClearBeforeFill = true;
             // 
             // button2
             // 
@@ -132,9 +107,6 @@
             this.Name = "Login";
             this.Text = "Login";
             this.Load += new System.EventHandler(this.Form1_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.cAUTHUBindingSource)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.qLBongDaDataSet)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.cAUTHUBindingSource1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -147,10 +119,6 @@
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Label label2;
-        private QLBongDaDataSet qLBongDaDataSet;
-        private System.Windows.Forms.BindingSource cAUTHUBindingSource;
-        private QLBongDaDataSetTableAdapters.CAUTHUTableAdapter cAUTHUTableAdapter;
-        private System.Windows.Forms.BindingSource cAUTHUBindingSource1;
         private System.Windows.Forms.Button button2;
     }
 }
