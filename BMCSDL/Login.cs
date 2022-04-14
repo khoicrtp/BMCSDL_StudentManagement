@@ -37,16 +37,17 @@ namespace BMCSDL
             cmd.Parameters.Add(new SqlParameter("@TENDN", textBox1.Text));
             cmd.Parameters.Add(new SqlParameter("@MATKHAU", textBox2.Text));
 
-            SqlDataReader rdr = cmd.ExecuteReader();
-            String loginData = "";
+            dataReader = cmd.ExecuteReader();
 
             DataTable dt = new DataTable();
-            dt.Load(rdr);
-            MessageBox.Show(dt.Rows[0][0].ToString());
-            if (dt.Columns.Count>0)
+            dt.Load(dataReader);
+            
+            if (dt.Rows.Count>0)
             {
-                MessageBox.Show("Login successfully");
-                /* I have made a new page called home page. If the user is successfully authenticated then the form will be moved to the next form */
+                MessageBox.Show("Login successfully ! Welcome teacher !");
+                //MainMenu mainM = new MainMenu();
+                //this.Hide();
+                //mainM.ShowDialog();
             }
             else
             {
@@ -57,15 +58,18 @@ namespace BMCSDL
                 cmd.Parameters.Add(new SqlParameter("@TENDN", textBox1.Text));
                 cmd.Parameters.Add(new SqlParameter("@MATKHAU", textBox2.Text));
 
-                rdr = cmd.ExecuteReader();
+                dataReader = cmd.ExecuteReader();
                 dt = new DataTable();
-                dt.Load(rdr);
+                dt.Load(dataReader);
 
                 cnn.Close();
 
-                if (dt.Columns.Count > 0)
+                if (dt.Rows.Count > 0)
                 {
-                    MessageBox.Show("Login successfully");
+                    MessageBox.Show("Login successfully ! Welcome student");
+                    //MainMenu mainM = new MainMenu();
+                    //this.Hide();
+                    //mainM.ShowDialog();
                 }
                 else
                 {
