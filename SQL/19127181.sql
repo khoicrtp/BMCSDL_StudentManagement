@@ -47,36 +47,36 @@ CREATE TABLE LOP
 -- YEU CAU C ---------------------------------
 -- TAO KHOA ----------------------------------
 -- SYMMETRIC----------------------------------
-if not exists
+IF NOT EXISTS
 (
-	select *
-	from sys.symmetric_keys
-	where symmetric_key_id = 101
+        SELECT *
+        FROM SYS.SYMMETRIC_KEYS     
+        WHERE SYMMETRIC_KEY_ID = 101
 )
-create master key encryption by
-	password = '19127181'
-go
+CREATE MASTER KEY ENCRYPTION BY     
+        PASSWORD = '19127181'       
+GO
 
-if not exists
+IF NOT EXISTS
 (
-	select *
-	from sys.certificates
-	where name = 'MyCert'
+        SELECT *
+        FROM SYS.CERTIFICATES       
+        WHERE NAME = 'MYCERT'
 )
-create certificate MyCert
-	with subject = 'MyCert';
-go
+CREATE CERTIFICATE MYCERT
+        WITH SUBJECT = 'MYCERT';
+GO
 
-if not exists
+IF NOT EXISTS
 (
-	select *
-	from sys.symmetric_keys
-	where name = 'PriKey'
+        SELECT *
+        FROM SYS.SYMMETRIC_KEYS
+        WHERE NAME = 'PRIKEY'
 )
-create symmetric key PriKey with
-	algorithm = aes_256
-	encryption by password = '19127181';
-go
+CREATE SYMMETRIC KEY PRIKEY WITH
+        ALGORITHM = AES_256
+        ENCRYPTION BY PASSWORD = '19127181';
+GO
 
 -- ASYMMETRIC --------------------------------
 CREATE ASYMMETRIC KEY BMK
@@ -159,29 +159,6 @@ WHERE TENDN = @TENDN AND MATKHAU=@MK
 END;
 GO
 
-/*
-CREATE PROCEDURE SP_LOGIN_NV (@TENDN NVARCHAR(100), @MATKHAU VARCHAR(100))
-AS 
-BEGIN
-Declare @MK VARBINARY(MAX)
-SELECT @MK = HASHBYTES('MD5', @MATKHAU)
-SELECT * from NHANVIEN
-WHERE TENDN = @TENDN AND MATKHAU=@MK
-END;
-GO
-
-
-CREATE PROCEDURE SP_LOGIN_NV (@TENDN NVARCHAR(100), @MATKHAU VARCHAR(100))
-AS 
-BEGIN
-	Declare @MK VARBINARY(MAX)
-	set @MK = HASHBYTES('SHA1', @MATKHAU)
-	print @mk
-	SELECT * from NHANVIEN
-	WHERE TENDN = @TENDN AND MATKHAU=@MK
-END;
-GO
-*/
 
 CREATE PROCEDURE SP_LOGIN_NV (@TENDN NVARCHAR(100), @MATKHAU VARCHAR(100))
 AS 
