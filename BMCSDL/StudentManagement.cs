@@ -99,6 +99,7 @@ namespace BMCSDL
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add(new SqlParameter("@MANV", this.MANV));
                 cmd.Parameters.Add(new SqlParameter("@MASV", textBox1.Text));
+                cmd.Parameters.Add(new SqlParameter("@MALOP", textBox3.Text));
                 cmd.ExecuteNonQuery();
 
                 cnn.Close();
