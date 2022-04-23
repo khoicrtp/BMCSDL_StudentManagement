@@ -12,9 +12,12 @@ namespace BMCSDL
 {
     public partial class MainMenu : Form
     {
-        public MainMenu()
+        string MANV = "";
+        public MainMenu(string MANV)
         {
             InitializeComponent();
+            this.MANV = MANV;
+            label1.Text = "Welcome back, " + this.MANV;
         }
 
         private void Form2_Load(object sender, EventArgs e)
@@ -30,15 +33,27 @@ namespace BMCSDL
         private void button1_Click(object sender, EventArgs e)
         {
             this.Hide();
-            ClassManagement classM = new ClassManagement();
+            ClassManagement classM = new ClassManagement(MANV);
             classM.ShowDialog();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             this.Hide();
-            StudentManagement studentM = new StudentManagement();
+            StudentManagement studentM = new StudentManagement(MANV);
             studentM.ShowDialog();
+        }
+
+        private void label1_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            AddPoint addP = new AddPoint(this.MANV);
+            this.Hide();
+            addP.ShowDialog();
         }
     }
 }

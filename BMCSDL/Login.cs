@@ -27,15 +27,15 @@ namespace BMCSDL
             }
             string connetionString;
             SqlConnection cnn;
-            connetionString = @"Data Source=DESKTOP-RDCK09P;Initial Catalog=QLSV;User ID=admin;Password=a";
+            connetionString = @"Data Source=DESKTOP-RDCK09P;Initial Catalog=QLSVNhom;User ID=admin;Password=a";
             cnn = new SqlConnection(connetionString);
             SqlDataReader dataReader;
             cnn.Open();
 
-            SqlCommand cmd = new SqlCommand("SP_LOGIN_NV", cnn);
+            SqlCommand cmd = new SqlCommand("SP_SEL_PUBLIC_NHANVIEN", cnn);
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Add(new SqlParameter("@TENDN", textBox1.Text));
-            cmd.Parameters.Add(new SqlParameter("@MATKHAU", textBox2.Text));
+            cmd.Parameters.Add(new SqlParameter("@MK", textBox2.Text));
 
             dataReader = cmd.ExecuteReader();
 
@@ -44,10 +44,12 @@ namespace BMCSDL
             
             if (dt.Rows.Count>0)
             {
-                MessageBox.Show("Login successfully ! Welcome teacher !");
-                //MainMenu mainM = new MainMenu();
-                //this.Hide();
-                //mainM.ShowDialog();
+                DataRow[] datas1 = dt.AsEnumerable().ToArray();
+                String hellomsg = "Login successfully ! Welcome teacher " + datas1[0][0].ToString();
+                MessageBox.Show(hellomsg);
+                MainMenu mainM = new MainMenu(datas1[0][0].ToString());
+                this.Hide();
+                mainM.ShowDialog();
             }
             else
             {
@@ -66,8 +68,9 @@ namespace BMCSDL
 
                 if (dt.Rows.Count > 0)
                 {
+                    DataRow[] datas1 = dt.AsEnumerable().ToArray();
                     MessageBox.Show("Login successfully ! Welcome student");
-                    //MainMenu mainM = new MainMenu();
+                    //MainMenu mainM = new MainMenu(datas1[0][0].ToString());
                     //this.Hide();
                     //mainM.ShowDialog();
                 }

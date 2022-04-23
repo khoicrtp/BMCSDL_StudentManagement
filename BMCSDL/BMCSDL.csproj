@@ -46,11 +46,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddPoint.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AddPoint.Designer.cs">
+      <DependentUpon>AddPoint.cs</DependentUpon>
+    </Compile>
     <Compile Include="ClassManagement.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ClassManagement.Designer.cs">
       <DependentUpon>ClassManagement.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StudentManagementUtil.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StudentManagementUtil.Designer.cs">
+      <DependentUpon>StudentManagementUtil.cs</DependentUpon>
     </Compile>
     <Compile Include="Login.cs">
       <SubType>Form</SubType>
@@ -72,8 +84,14 @@
     <Compile Include="StudentManagement.Designer.cs">
       <DependentUpon>StudentManagement.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="AddPoint.resx">
+      <DependentUpon>AddPoint.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ClassManagement.resx">
       <DependentUpon>ClassManagement.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StudentManagementUtil.resx">
+      <DependentUpon>StudentManagementUtil.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
