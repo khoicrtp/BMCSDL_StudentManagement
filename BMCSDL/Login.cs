@@ -25,62 +25,70 @@ namespace BMCSDL
                 MessageBox.Show("Please enter your Username and Password");
                 return;
             }
-            string connetionString;
-            SqlConnection cnn;
-            connetionString = @"Data Source=DESKTOP-RDCK09P;Initial Catalog=QLSVNhom;User ID=admin;Password=a";
-            cnn = new SqlConnection(connetionString);
-            SqlDataReader dataReader;
-            cnn.Open();
-
-            SqlCommand cmd = new SqlCommand("SP_SEL_PUBLIC_NHANVIEN", cnn);
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Add(new SqlParameter("@TENDN", textBox1.Text));
-            cmd.Parameters.Add(new SqlParameter("@MK", textBox2.Text));
-
-            dataReader = cmd.ExecuteReader();
-
-            DataTable dt = new DataTable();
-            dt.Load(dataReader);
-            
-            if (dt.Rows.Count>0)
+            try
             {
-                DataRow[] datas1 = dt.AsEnumerable().ToArray();
-                String hellomsg = "Login successfully ! Welcome teacher " + datas1[0][0].ToString();
-                MessageBox.Show(hellomsg);
-                MainMenu mainM = new MainMenu(datas1[0][0].ToString());
-                this.Hide();
-                mainM.ShowDialog();
-            }
-            else
-            {
-                cnn.Close();
+                string connetionString;
+                SqlConnection cnn;
+                //connetionString = @"Data Source=DESKTOP-RDCK09P;Initial Catalog=QLSVNhom;User ID=admin;Password=a";
+                connetionString = @"Data Source=.;Initial Catalog=QLSVNhom;Integrated Security=True;";
+                cnn = new SqlConnection(connetionString);
+                SqlDataReader dataReader;
                 cnn.Open();
-                cmd = new SqlCommand("SP_LOGIN_SV", cnn);
+
+                SqlCommand cmd = new SqlCommand("SP_SEL_PUBLIC_NHANVIEN", cnn);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add(new SqlParameter("@TENDN", textBox1.Text));
-                cmd.Parameters.Add(new SqlParameter("@MATKHAU", textBox2.Text));
+                cmd.Parameters.Add(new SqlParameter("@MK", textBox2.Text));
 
                 dataReader = cmd.ExecuteReader();
-                dt = new DataTable();
-                dt.Load(dataReader);
 
-                cnn.Close();
+                DataTable dt = new DataTable();
+                dt.Load(dataReader);
 
                 if (dt.Rows.Count > 0)
                 {
                     DataRow[] datas1 = dt.AsEnumerable().ToArray();
-                    MessageBox.Show("Login successfully ! Welcome student");
-                    //MainMenu mainM = new MainMenu(datas1[0][0].ToString());
-                    //this.Hide();
-                    //mainM.ShowDialog();
+                    String hellomsg = "Login successfully ! Welcome teacher " + datas1[0][0].ToString();
+                    MessageBox.Show(hellomsg);
+                    MainMenu mainM = new MainMenu(datas1[0][0].ToString());
+                    this.Hide();
+                    mainM.ShowDialog();
                 }
                 else
                 {
-                    MessageBox.Show("Invalid username or password");
-                }
-            }
+                    cnn.Close();
+                    cnn.Open();
+                    cmd = new SqlCommand("SP_LOGIN_SV", cnn);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("@TENDN", textBox1.Text));
+                    cmd.Parameters.Add(new SqlParameter("@MATKHAU", textBox2.Text));
 
-            cnn.Close();
+                    dataReader = cmd.ExecuteReader();
+                    dt = new DataTable();
+                    dt.Load(dataReader);
+
+                    cnn.Close();
+
+                    if (dt.Rows.Count > 0)
+                    {
+                        DataRow[] datas1 = dt.AsEnumerable().ToArray();
+                        MessageBox.Show("Login successfully ! Welcome student");
+                        //MainMenu mainM = new MainMenu(datas1[0][0].ToString());
+                        //this.Hide();
+                        //mainM.ShowDialog();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Invalid username or password");
+                    }
+                }
+
+                cnn.Close();
+            }
+            catch
+            {
+                MessageBox.Show("Something went wrong! Please check inputted data");
+            }
         }
 
         private void label1_Click(object sender, EventArgs e)

@@ -23,7 +23,8 @@ namespace BMCSDL
         {
             string connetionString;
             SqlConnection cnn;
-            connetionString = @"Data Source=DESKTOP-RDCK09P;Initial Catalog=QLSVNhom;User ID=admin;Password=a";
+            //connetionString = @"Data Source=DESKTOP-RDCK09P;Initial Catalog=QLSVNhom;User ID=admin;Password=a";
+            connetionString = @"Data Source=.;Initial Catalog=QLSVNhom;Integrated Security=True;";
             cnn = new SqlConnection(connetionString);
             cnn.Open();
 
@@ -42,24 +43,6 @@ namespace BMCSDL
         private void StudentManagement_Load(object sender, EventArgs e)
         {
             //refreshData();
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            string connetionString;
-            SqlConnection cnn;
-            connetionString = @"Data Source=DESKTOP-RDCK09P;Initial Catalog=QLSVNhom;User ID=admin;Password=a";
-            cnn = new SqlConnection(connetionString);
-            cnn.Open();
-
-            SqlCommand cmd = new SqlCommand("ViewSV", cnn);
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Add(new SqlParameter("@MALOP", textBox1.Text));
-            cmd.Parameters.Add(new SqlParameter("@MANV", this.MANV));
-            cmd.ExecuteNonQuery();
-
-            cnn.Close();
-            refreshData();
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -107,7 +90,8 @@ namespace BMCSDL
             {
                 string connetionString;
                 SqlConnection cnn;
-                connetionString = @"Data Source=DESKTOP-RDCK09P;Initial Catalog=QLSVNhom;User ID=admin;Password=a";
+                //connetionString = @"Data Source=DESKTOP-RDCK09P;Initial Catalog=QLSVNhom;User ID=admin;Password=a";
+                connetionString = @"Data Source=.;Initial Catalog=QLSVNhom;Integrated Security=True;";
                 cnn = new SqlConnection(connetionString);
                 cnn.Open();
 

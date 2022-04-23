@@ -24,7 +24,8 @@ namespace BMCSDL
         {
             string connetionString;
             SqlConnection cnn;
-            connetionString = @"Data Source=DESKTOP-RDCK09P;Initial Catalog=QLSVNhom;User ID=admin;Password=a";
+            //connetionString = @"Data Source=DESKTOP-RDCK09P;Initial Catalog=QLSVNhom;User ID=admin;Password=a";
+            connetionString = @"Data Source=.;Initial Catalog=QLSVNhom;Integrated Security=True;";
             cnn = new SqlConnection(connetionString);
             cnn.Open();
 
@@ -61,7 +62,8 @@ namespace BMCSDL
                 }
                 string connetionString;
                 SqlConnection cnn;
-                connetionString = @"Data Source=DESKTOP-RDCK09P;Initial Catalog=QLSVNhom;User ID=admin;Password=a";
+                //connetionString = @"Data Source=DESKTOP-RDCK09P;Initial Catalog=QLSVNhom;User ID=admin;Password=a";
+                connetionString = @"Data Source=.;Initial Catalog=QLSVNhom;Integrated Security=True;";
                 cnn = new SqlConnection(connetionString);
                 cnn.Open();
 
@@ -98,7 +100,8 @@ namespace BMCSDL
             {
                 string connetionString;
                 SqlConnection cnn;
-                connetionString = @"Data Source=DESKTOP-RDCK09P;Initial Catalog=QLSVNhom;User ID=admin;Password=a";
+                //connetionString = @"Data Source=DESKTOP-RDCK09P;Initial Catalog=QLSVNhom;User ID=admin;Password=a";
+                connetionString = @"Data Source=.;Initial Catalog=QLSVNhom;Integrated Security=True;";
                 cnn = new SqlConnection(connetionString);
                 cnn.Open();
 
@@ -129,7 +132,8 @@ namespace BMCSDL
             {
                 string connetionString;
                 SqlConnection cnn;
-                connetionString = @"Data Source=DESKTOP-RDCK09P;Initial Catalog=QLSVNhom;User ID=admin;Password=a";
+                //connetionString = @"Data Source=DESKTOP-RDCK09P;Initial Catalog=QLSVNhom;User ID=admin;Password=a";
+                connetionString = @"Data Source=.;Initial Catalog=QLSVNhom;Integrated Security=True;";
                 cnn = new SqlConnection(connetionString);
                 cnn.Open();
 
@@ -151,7 +155,8 @@ namespace BMCSDL
         {
             string connetionString;
             SqlConnection cnn;
-            connetionString = @"Data Source=DESKTOP-RDCK09P;Initial Catalog=QLSVNhom;User ID=admin;Password=a";
+            //connetionString = @"Data Source=DESKTOP-RDCK09P;Initial Catalog=QLSVNhom;User ID=admin;Password=a";
+            connetionString = @"Data Source=.;Initial Catalog=QLSVNhom;Integrated Security=True;";
             cnn = new SqlConnection(connetionString);
             cnn.Open();
 

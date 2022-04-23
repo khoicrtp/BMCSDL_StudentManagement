@@ -55,5 +55,12 @@ namespace BMCSDL
             this.Hide();
             addP.ShowDialog();
         }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Login loginF = new Login();
+            this.Hide();
+            loginF.ShowDialog();
+        }
     }
 }
