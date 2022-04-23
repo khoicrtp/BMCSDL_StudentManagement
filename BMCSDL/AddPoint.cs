@@ -21,16 +21,17 @@ namespace BMCSDL
         }
         private void refreshData()
         {
-            /*
             string connetionString;
             SqlConnection cnn;
-            connetionString = @"Data Source=DESKTOP-RDCK09P;Initial Catalog=QLSVNhom;User ID=admin;Password=a";
+            //connetionString = @"Data Source=DESKTOP-RDCK09P;Initial Catalog=QLSVNhom;User ID=admin;Password=a";
+            connetionString = @"Data Source=.;Initial Catalog=QLSVNhom;Integrated Security=True;";
             cnn = new SqlConnection(connetionString);
             cnn.Open();
 
             SqlCommand cmd = new SqlCommand("ViewPoints", cnn);
             cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Add(new SqlParameter("@MALOP", textBox3.Text));
+            cmd.Parameters.Add(new SqlParameter("@MAHP", textBox2.Text));
+            cmd.Parameters.Add(new SqlParameter("@MANV", this.MANV));
 
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataTable dt = new DataTable();
@@ -38,17 +39,42 @@ namespace BMCSDL
             dataGridView1.DataSource = dt;
             cmd.ExecuteNonQuery();
             cnn.Close();
-            */
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
+            if (textBox1.Text == "" || textBox2.Text == "" || textBox3.Text == "")
+            {
+                MessageBox.Show("Please enter required information");
+                return;
+            }
+            try
+            {
+                string connetionString;
+                SqlConnection cnn;
+                connetionString = @"Data Source=.;Initial Catalog=QLSVNhom;Integrated Security=True;";
+                cnn = new SqlConnection(connetionString);
+                cnn.Open();
 
+                SqlCommand cmd = new SqlCommand("AddPoints", cnn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new SqlParameter("@MASV", textBox1.Text));
+                cmd.Parameters.Add(new SqlParameter("@MAHP", textBox2.Text));
+                cmd.Parameters.Add(new SqlParameter("@DIEMTHI", textBox3.Text));
+                cmd.Parameters.Add(new SqlParameter("@MANV", this.MANV));
+                cmd.ExecuteNonQuery();
+                cnn.Close();
+                refreshData();
+            }
+            catch
+            {
+                MessageBox.Show("Something went wrong! Please check inputted data!");
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-
+            refreshData();
         }
 
         private void AddPoint_Load(object sender, EventArgs e)
