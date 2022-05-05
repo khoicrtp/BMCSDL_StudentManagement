@@ -178,5 +178,10 @@ namespace BMCSDL
             MainMenu mainM= new MainMenu(this.MANV);
             mainM.ShowDialog();
         }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
     }
 }
