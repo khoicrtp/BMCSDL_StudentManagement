@@ -12,12 +12,24 @@ namespace BMCSDL
 {
     public partial class MainMenu : Form
     {
-        string MANV = "";
-        public MainMenu(string MANV)
+        string MANV;
+        string HOTEN;
+        string EMAIL;
+        string LUONG;
+        string TENDN;
+        string MATKHAU;
+        string PUBKEY;
+        public MainMenu(string MANV, string HOTEN, string EMAIL, string LUONG, string TENDN, string MATKHAU, string PUBKEY)
         {
             InitializeComponent();
             this.MANV = MANV;
-            label1.Text = "Welcome back, " + this.MANV;
+            this.HOTEN = HOTEN;
+            this.EMAIL = EMAIL;
+            this.LUONG = LUONG;
+            this.TENDN = TENDN;
+            this.MATKHAU = MATKHAU;
+            this.PUBKEY = PUBKEY;
+            label1.Text = "Welcome back, " + this.HOTEN;
         }
 
         private void Form2_Load(object sender, EventArgs e)
@@ -33,14 +45,14 @@ namespace BMCSDL
         private void button1_Click(object sender, EventArgs e)
         {
             this.Hide();
-            ClassManagement classM = new ClassManagement(MANV);
+            ClassManagement classM = new ClassManagement(MANV, HOTEN, EMAIL, LUONG, TENDN, MATKHAU, PUBKEY);
             classM.ShowDialog();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             this.Hide();
-            StudentManagement studentM = new StudentManagement(MANV);
+            StudentManagement studentM = new StudentManagement(MANV, HOTEN, EMAIL, LUONG, TENDN, MATKHAU, PUBKEY);
             studentM.ShowDialog();
         }
 
@@ -51,7 +63,7 @@ namespace BMCSDL
 
         private void button4_Click(object sender, EventArgs e)
         {
-            AddPoint addP = new AddPoint(this.MANV);
+            AddPoint addP = new AddPoint(MANV, HOTEN, EMAIL, LUONG, TENDN, MATKHAU, PUBKEY);
             this.Hide();
             addP.ShowDialog();
         }
@@ -61,6 +73,13 @@ namespace BMCSDL
             Login loginF = new Login();
             this.Hide();
             loginF.ShowDialog();
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            TeacherManagement addP = new TeacherManagement(MANV, HOTEN, EMAIL, LUONG, TENDN, MATKHAU, PUBKEY);
+            this.Hide();
+            addP.ShowDialog();
         }
     }
 }

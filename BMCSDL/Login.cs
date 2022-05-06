@@ -97,10 +97,10 @@ namespace BMCSDL
                     DataRow[] datas1 = dt.AsEnumerable().ToArray();
                     String hellomsg = "Login successfully ! Welcome teacher " + datas1[0][0].ToString();
                     MessageBox.Show(hellomsg);
-                    TeacherManagement teacherM = new TeacherManagement(datas1[0][0].ToString(), datas1[0][1].ToString(), 
+                    MainMenu mainM = new MainMenu(datas1[0][0].ToString(), datas1[0][1].ToString(), 
                         datas1[0][2].ToString(), datas1[0][3].ToString(), datas1[0][4].ToString() , datas1[0][5].ToString() , datas1[0][6].ToString());
                     this.Hide();
-                    teacherM.ShowDialog();
+                    mainM.ShowDialog();
                 }
                 else
                 {
@@ -121,9 +121,11 @@ namespace BMCSDL
                     {
                         DataRow[] datas1 = dt.AsEnumerable().ToArray();
                         MessageBox.Show("Login successfully ! Welcome student");
+                        /*
                         TeacherManagement teacherM = new TeacherManagement("", "", "", "", "", "", "");
                         this.Hide();
                         teacherM.ShowDialog();
+                        */
                     }
                     else
                     {

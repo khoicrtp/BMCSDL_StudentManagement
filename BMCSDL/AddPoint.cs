@@ -14,11 +14,23 @@ namespace BMCSDL
 {
     public partial class AddPoint : Form
     {
-        String MANV;
-        public AddPoint(String MANV)
+        string MANV;
+        string HOTEN;
+        string EMAIL;
+        string LUONG;
+        string TENDN;
+        string MATKHAU;
+        string PUBKEY;
+        public AddPoint(string MANV, string HOTEN, string EMAIL, string LUONG, string TENDN, string MATKHAU, string PUBKEY)
         {
             InitializeComponent();
             this.MANV = MANV;
+            this.HOTEN = HOTEN;
+            this.EMAIL = EMAIL;
+            this.LUONG = LUONG;
+            this.TENDN = TENDN;
+            this.MATKHAU = MATKHAU;
+            this.PUBKEY = PUBKEY;
         }
         private void refreshData()
         {
@@ -85,7 +97,7 @@ namespace BMCSDL
 
         private void button3_Click(object sender, EventArgs e)
         {
-            MainMenu mainM = new MainMenu(MANV);
+            MainMenu mainM = new MainMenu(MANV, HOTEN, EMAIL, LUONG, TENDN, MATKHAU, PUBKEY);
             this.Hide();
             mainM.ShowDialog();
         }

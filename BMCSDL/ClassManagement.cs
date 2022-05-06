@@ -13,11 +13,24 @@ namespace BMCSDL
 {
     public partial class ClassManagement : Form
     {
-        string MANV="";
-        public ClassManagement(string MANV)
+        string MANV;
+        string HOTEN;
+        string EMAIL;
+        string LUONG;
+        string TENDN;
+        string MATKHAU;
+        string PUBKEY;
+        DataTable dt;
+        public ClassManagement(string MANV, string HOTEN, string EMAIL, string LUONG, string TENDN, string MATKHAU, string PUBKEY)
         {
             InitializeComponent();
             this.MANV = MANV;
+            this.HOTEN = HOTEN;
+            this.EMAIL = EMAIL;
+            this.LUONG = LUONG;
+            this.TENDN = TENDN;
+            this.MATKHAU = MATKHAU;
+            this.PUBKEY = PUBKEY;
         }
 
         private void refreshData()
@@ -29,12 +42,12 @@ namespace BMCSDL
             cnn = new SqlConnection(connetionString);
             cnn.Open();
 
-            SqlCommand cmd = new SqlCommand("ViewClass", cnn);
+            SqlCommand cmd = new SqlCommand("SP_SEL_LOP", cnn);
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Add(new SqlParameter("@MANV", this.MANV));
 
             SqlDataAdapter da = new SqlDataAdapter(cmd);
-            DataTable dt = new DataTable();
+            dt = new DataTable();
             da.Fill(dt);
             dataGridView1.DataSource = dt;
             cmd.ExecuteNonQuery();
@@ -67,7 +80,7 @@ namespace BMCSDL
                 cnn = new SqlConnection(connetionString);
                 cnn.Open();
 
-                SqlCommand cmd = new SqlCommand("AddClass", cnn);
+                SqlCommand cmd = new SqlCommand("SP_INS_LOP", cnn);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add(new SqlParameter("@MALOP", textBox1.Text));
                 cmd.Parameters.Add(new SqlParameter("@TENLOP", textBox2.Text));
@@ -100,12 +113,11 @@ namespace BMCSDL
             {
                 string connetionString;
                 SqlConnection cnn;
-                //connetionString = @"Data Source=DESKTOP-RDCK09P;Initial Catalog=QLSVNhom;User ID=admin;Password=a";
                 connetionString = @"Data Source=.;Initial Catalog=QLSVNhom;Integrated Security=True;";
                 cnn = new SqlConnection(connetionString);
                 cnn.Open();
 
-                SqlCommand cmd = new SqlCommand("UpdateClass", cnn);
+                SqlCommand cmd = new SqlCommand("SP_UPD_LOP", cnn);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add(new SqlParameter("@MALOP", textBox1.Text));
                 cmd.Parameters.Add(new SqlParameter("@TENLOP", textBox2.Text));
@@ -123,24 +135,21 @@ namespace BMCSDL
 
         private void button3_Click(object sender, EventArgs e)
         {
-            if (textBox1.Text == "")
-            {
-                MessageBox.Show("Please enter ClassID");
-                return;
-            }
             try
             {
                 string connetionString;
                 SqlConnection cnn;
+                int selectedRow = dataGridView1.CurrentCell.RowIndex;
+                String SelectedMALOP = this.dt.Rows[selectedRow][0].ToString();
                 //connetionString = @"Data Source=DESKTOP-RDCK09P;Initial Catalog=QLSVNhom;User ID=admin;Password=a";
                 connetionString = @"Data Source=.;Initial Catalog=QLSVNhom;Integrated Security=True;";
                 cnn = new SqlConnection(connetionString);
                 cnn.Open();
 
-                SqlCommand cmd = new SqlCommand("DeleteClass", cnn);
+                SqlCommand cmd = new SqlCommand("SP_DEL_LOP", cnn);
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new SqlParameter("@MALOP", textBox1.Text));
-                cmd.Parameters.Add(new SqlParameter("@MANV", this.MANV));
+                cmd.Parameters.Add(new SqlParameter("@MALOP", SelectedMALOP));
+                //cmd.Parameters.Add(new SqlParameter("@MANV", this.MANV));
                 cmd.ExecuteNonQuery();
 
                 cnn.Close();
@@ -153,29 +162,13 @@ namespace BMCSDL
         }
         private void button4_Click(object sender, EventArgs e)
         {
-            string connetionString;
-            SqlConnection cnn;
-            //connetionString = @"Data Source=DESKTOP-RDCK09P;Initial Catalog=QLSVNhom;User ID=admin;Password=a";
-            connetionString = @"Data Source=.;Initial Catalog=QLSVNhom;Integrated Security=True;";
-            cnn = new SqlConnection(connetionString);
-            cnn.Open();
-
-            SqlCommand cmd = new SqlCommand("ViewClass", cnn);
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Add(new SqlParameter("@MANV", this.MANV));
-
-            SqlDataAdapter da = new SqlDataAdapter(cmd);
-            DataTable dt = new DataTable();
-            da.Fill(dt);
-            dataGridView1.DataSource = dt;
-            cmd.ExecuteNonQuery();
-            cnn.Close();
+            refreshData();
         }
 
         private void button5_Click(object sender, EventArgs e)
         {
             this.Hide();
-            MainMenu mainM= new MainMenu(this.MANV);
+            MainMenu mainM = new MainMenu(MANV, HOTEN, EMAIL, LUONG, TENDN, MATKHAU, PUBKEY);
             mainM.ShowDialog();
         }
 

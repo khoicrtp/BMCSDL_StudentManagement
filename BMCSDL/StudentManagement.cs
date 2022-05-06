@@ -14,10 +14,23 @@ namespace BMCSDL
     public partial class StudentManagement : Form
     {
         string MANV;
-        public StudentManagement(string MANV)
+        string HOTEN;
+        string EMAIL;
+        string LUONG;
+        string TENDN;
+        string MATKHAU;
+        string PUBKEY;
+        DataTable dt;
+        public StudentManagement(string MANV, string HOTEN, string EMAIL, string LUONG, string TENDN, string MATKHAU, string PUBKEY)
         {
             InitializeComponent();
             this.MANV = MANV;
+            this.HOTEN = HOTEN;
+            this.EMAIL = EMAIL;
+            this.LUONG = LUONG;
+            this.TENDN = TENDN;
+            this.MATKHAU = MATKHAU;
+            this.PUBKEY = PUBKEY;
         }
         private void refreshData()
         {
@@ -28,12 +41,13 @@ namespace BMCSDL
             cnn = new SqlConnection(connetionString);
             cnn.Open();
 
-            SqlCommand cmd = new SqlCommand("ViewSV", cnn);
+            SqlCommand cmd = new SqlCommand("SP_SEL_SINHVIEN", cnn);
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Add(new SqlParameter("@MALOP", textBox3.Text));
+            cmd.Parameters.Add(new SqlParameter("@MANV", this.MANV));
 
             SqlDataAdapter da = new SqlDataAdapter(cmd);
-            DataTable dt = new DataTable();
+            dt = new DataTable();
             da.Fill(dt);
             dataGridView1.DataSource = dt;
             cmd.ExecuteNonQuery();
@@ -48,7 +62,7 @@ namespace BMCSDL
         private void button4_Click(object sender, EventArgs e)
         {
             this.Hide();
-            MainMenu mainM = new MainMenu(MANV);
+            MainMenu mainM = new MainMenu(MANV, HOTEN, EMAIL, LUONG, TENDN, MATKHAU, PUBKEY);
             mainM.ShowDialog();
         }
 
@@ -59,7 +73,7 @@ namespace BMCSDL
 
         private void button5_Click(object sender, EventArgs e)
         {
-            MainMenu mainM = new MainMenu(MANV);
+            MainMenu mainM = new MainMenu(MANV, HOTEN, EMAIL, LUONG, TENDN, MATKHAU, PUBKEY);
             this.Hide();
             mainM.ShowDialog();
         }
@@ -68,6 +82,7 @@ namespace BMCSDL
         {
             StudentManagementUtil addS = new StudentManagementUtil(MANV);
             addS.ShowDialog();
+            refreshData();
         }
 
         private void button4_Click_1(object sender, EventArgs e)
@@ -81,13 +96,10 @@ namespace BMCSDL
 
         private void button3_Click_1(object sender, EventArgs e)
         {
-            if (textBox1.Text == "" || textBox3.Text == "")
-            {
-                MessageBox.Show("Please enter required information");
-                return;
-            }
             try
             {
+                int selectedRow = dataGridView1.CurrentCell.RowIndex;
+                String SelectedMASV= this.dt.Rows[selectedRow][0].ToString();
                 string connetionString;
                 SqlConnection cnn;
                 //connetionString = @"Data Source=DESKTOP-RDCK09P;Initial Catalog=QLSVNhom;User ID=admin;Password=a";
@@ -95,11 +107,11 @@ namespace BMCSDL
                 cnn = new SqlConnection(connetionString);
                 cnn.Open();
 
-                SqlCommand cmd = new SqlCommand("DeleteSV", cnn);
+                SqlCommand cmd = new SqlCommand("SP_DEL_SINHVIEN", cnn);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add(new SqlParameter("@MANV", this.MANV));
-                cmd.Parameters.Add(new SqlParameter("@MASV", textBox1.Text));
-                cmd.Parameters.Add(new SqlParameter("@MALOP", textBox3.Text));
+                cmd.Parameters.Add(new SqlParameter("@MASV", SelectedMASV));
+
                 cmd.ExecuteNonQuery();
 
                 cnn.Close();

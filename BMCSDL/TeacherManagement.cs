@@ -219,7 +219,7 @@ namespace BMCSDL
         private void button6_Click(object sender, EventArgs e)
         {
             this.Hide();
-            Login mainM = new Login();
+            MainMenu mainM = new MainMenu(MANV, HOTEN, EMAIL, LUONG, TENDN, MATKHAU, PUBKEY);
             mainM.ShowDialog();
         }
 
