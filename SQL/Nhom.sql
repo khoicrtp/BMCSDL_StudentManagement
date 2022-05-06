@@ -1,349 +1,319 @@
-/*----------------------------------------------------------
+﻿/*----------------------------------------------------------
 MASV:
 HO TEN CAC THANH VIEN NHOM:
 	BACH MINH KHOI - 19127181
 	LAM TRI DUC - 19127122
 	TRUONG BUU Y - 19127638
-LAB: 03 - NHOM 5
-NGAY: 4/8/2022
+LAB: 04 - NHOM 5
+NGAY: 4/28/2022
 ----------------------------------------------------------*/
 
-/*
-Yeu cau a
-*/
+--- MAN HINH DANG NHAP
+CREATE DATABASE QLSVNhom
+GO
 
-drop database QLSVNhom
-go
+USE QLSVNhom
+GO
 
-create database QLSVNhom
-go
-
-use QlSVNhom
-go
-
-/*
-Yeu cau b
-*/
-
-create table SINHVIEN
+CREATE TABLE SINHVIEN
 (
-	MASV NVARCHAR(20) primary key,
-	HOTEN NVARCHAR(100) not null,
+	MASV NVARCHAR(20) PRIMARY KEY,
+	HOTEN NVARCHAR(100) NOT NULL,
 	NGAYSINH DATETIME,
 	DIACHI NVARCHAR(200),
 	MALOP VARCHAR (20),
-	TENDN NVARCHAR(100) not null,
-	MATKHAU VARBINARY(16) not null
+	TENDN NVARCHAR(100) NOT NULL,
+	MATKHAU VARCHAR(100) NOT NULL
 );
 
-create table NHANVIEN
+CREATE TABLE NHANVIEN
 (
-	MANV VARCHAR(20) primary key,
-	HOTEN NVARCHAR(100) not null,
+	MANV VARCHAR(20) PRIMARY KEY,
+	HOTEN NVARCHAR(100) NOT NULL,
 	EMAIL VARCHAR(20),
-	LUONG VARBINARY(max),
-	TENDN NVARCHAR(100) not null,
-	MATKHAU VARBINARY(20) not null,
+	LUONG VARCHAR(100),
+	TENDN NVARCHAR(100) NOT NULL,
+	MATKHAU VARCHAR(100) NOT NULL,
 	PUBKEY VARCHAR(20)
 );
 
-create table LOP
+CREATE TABLE LOP
 (
-	MALOP VARCHAR(20) primary key,
-	TENLOP NVARCHAR(100) not null,
+	MALOP VARCHAR(20) PRIMARY KEY,
+	TENLOP NVARCHAR(100) NOT NULL,
 	MANV VARCHAR(20)
 );
 
-create table HOCPHAN
+CREATE TABLE HOCPHAN
 (
-	MAHP VARCHAR(20) primary key,
-	TENHP NVARCHAR(100) not null,
+	MAHP VARCHAR(20) PRIMARY KEY,
+	TENHP NVARCHAR(100) NOT NULL,
 	SOTC INT
 );
 
-create table BANGDIEM
+CREATE TABLE BANGDIEM
 (
 	MASV VARCHAR(20),
 	MAHP VARCHAR(20),
-	DIEMTHI VARBINARY(max),
-	constraint PK_BANGDIEM primary key (MASV, MAHP)
+	DIEMTHI VARCHAR(10),
+	CONSTRAINT PK_BANGDIEM PRIMARY KEY (MASV, MAHP)
 );
 
 go
 
-/*
-Yeu cau c
-*/
-
+/*Yeu cau c*/
 --- i
-
-
-create procedure SP_INS_PUBLIC_NHANVIEN (@MANV VARCHAR(20),
+CREATE PROCEDURE SP_INS_ENCRYPT_SINHVIEN (@MASV VARCHAR(20),
 										 @HOTEN NVARCHAR(100),
-										 @EMAIL VARCHAR(20),
-										 @LUONGCB INT,
+										 @NGAYSINH DATETIME,
+										 @DIACHI NVARCHAR(200),
+										 @MALOP VARCHAR(20),
 										 @TENDN NVARCHAR(100),
 										 @MK VARCHAR(100))
-as
-begin
-	declare @H_MK nvarchar(max)
-	set @H_MK = convert(nvarchar, hashbytes('SHA1', @MK))
-	if not exists
-	(
-		select *
-		from sys.asymmetric_keys
-		where name = @MANV
-	)
-	exec(
-	'create asymmetric key ' + @MANV + ' with
-		algorithm = rsa_2048
-		encryption by password = ''' + @H_MK + ''''
-	)
+AS
+BEGIN
+	INSERT INTO SINHVIEN(MASV, HOTEN, NGAYSINH, DIACHI, MALOP, TENDN, MATKHAU)
+	VALUES
+	(@MASV, @HOTEN, @NGAYSINH, @DIACHI, @MALOP, @TENDN, @MK)
+END;
+GO
+EXEC SP_INS_ENCRYPT_SINHVIEN 'SV02', 'NGUYEN VAN A', '1/1/1990', '280 AN DUONG VUONG', '19MMT', 'asv2', '0cc175b9c0f1b6a831c399e269772661'
+GO
+------
+CREATE PROCEDURE SP_INS_ENCRYPT_NHANVIEN (@MANV VARCHAR(20),
+										 @HOTEN NVARCHAR(100),
+										 @EMAIL VARCHAR(20),
+										 @LUONG VARCHAR(100),
+										 @TENDN NVARCHAR(100),
+										 @MK VARCHAR(100),
+										 @PUBKEY VARCHAR(20))
+AS
+BEGIN
+	INSERT INTO NHANVIEN(MANV, HOTEN, EMAIL, LUONG, TENDN, MATKHAU, PUBKEY)
+	VALUES
+	(@MANV, @HOTEN, @EMAIL, @LUONG, @TENDN, @MK, @PUBKEY)
+END;
+GO
 
-	declare @AsymID int;
-	set @AsymID = ASYMKEY_ID(@MANV);
-	declare @MH varbinary(max)
-	select @MH = ENCRYPTBYASYMKEY(@AsymID, convert(varchar, @LUONGCB))
 
-	insert into NHANVIEN(MANV, 
-						 HOTEN, 
-						 EMAIL, 
-						 LUONG, 
-						 TENDN, 
-						 MATKHAU,
-						 PUBKEY)
-	values
-	(
-		@MANV, 
-		@HOTEN, 
-		@EMAIL, 
-		@MH, 
-		@TENDN, 
-		hashbytes('SHA1', @MK),
-		@MANV
-	)
-end;
-go
-
-EXEC SP_INS_PUBLIC_NHANVIEN 'a', 'NGUYEN VAN A', 'NVA@', 3000000, 'a', 'a'
-go
-
-declare @TENDN nvarchar(100);
-set @TENDN = 'NV01';
-declare @AsymID int;
-set @AsymID = ASYMKEY_ID(@TENDN);
-declare @MK varchar(100);
-set @MK = 'abcd12';
-select MANV, TENDN, convert(varchar, decryptbyasymkey(@AsymID, LUONG, convert(nvarchar, hashbytes('SHA1', @MK)))) as LUONGCB
-from NHANVIEN
-go
+EXEC SP_INS_ENCRYPT_NHANVIEN 'a', 'NGUYEN VAN A', 'NVA@', '1tuXqKI768EYL4P1Yd9NQw==', 'a', 
+					'0cc175b9c0f1b6a831c399e269772661', 'PUBPUB'
+GO
 
 --- ii	
-create procedure SP_SEL_PUBLIC_NHANVIEN (@TENDN NVARCHAR(100),
-										 @MK VARCHAR(100))
+--------------------------------
+CREATE PROCEDURE SP_SEL_ENCRYPT_NHANVIEN
+AS
+BEGIN
+	SELECT MANV, HOTEN, EMAIL, LUONG
+	from NHANVIEN
+END;
+GO
+
+EXEC SP_SEL_ENCRYPT_NHANVIEN
+GO
+------------------------------
+DROP PROCEDURE SP_DEL_NHANVIEN
+GO
+CREATE PROCEDURE SP_DEL_NHANVIEN (@MANV VARCHAR(20))
+AS
+BEGIN
+	DELETE 
+	from NHANVIEN
+	WHERE MANV = @MANV
+END;
+GO
+
+EXEC SP_DEL_NHANVIEN @MANV ='a2'
+GO
+
+
+create procedure SP_SEL_LOGIN @TENDN nvarchar(100),
+							  @MATKHAU VARCHAR(100)
 as
 begin
-	declare @H_MK varbinary(max);
-	set @H_MK = HASHBYTES('SHA1', @MK);
-
-	select MANV, HOTEN, EMAIL, convert(varchar, decryptbyasymkey(ASYMKEY_ID(PUBKEY), LUONG, convert(nvarchar, HASHBYTES('SHA1', @MK)))) as LUONGCB
+	select *
 	from NHANVIEN
-	where @TENDN = TENDN and @H_MK = MATKHAU
+	where @TENDN = TENDN and @MATKHAU = MATKHAU
 end;
 go
 
-EXEC SP_SEL_PUBLIC_NHANVIEN 'a', 'a'
-go
+--- MAN HINH QUAN LI NHAN VIEN
 
-
--- LOGIN SV
-CREATE PROCEDURE SP_INS_SINHVIEN (@MASV NVARCHAR(20),
-                                  @HOTEN NVARCHAR(100),
-                                  @NGAYSINH DATETIME,
-                                  @DIACHI NVARCHAR(200),
-                                  @MALOP NVARCHAR(20),
-                                  @TENDN NVARCHAR(100),
-                                  @MATKHAU VARCHAR(100))
-AS
-BEGIN
-        INSERT INTO SINHVIEN (MASV, HOTEN, NGAYSINH, DIACHI, MALOP, TENDN, MATKHAU)
-        VALUES
-        (
-                @MASV, @HOTEN, @NGAYSINH, @DIACHI, @MALOP, @TENDN, HASHBYTES('MD5', @MATKHAU)
-        )
-END;
-GO
-
-
-
-CREATE PROCEDURE SP_LOGIN_SV (@TENDN NVARCHAR(100), @MATKHAU VARCHAR(100))
-AS 
-BEGIN
-Declare @MK VARBINARY(MAX)
-SELECT @MK = HASHBYTES('MD5', @MATKHAU)
-SELECT * from SINHVIEN
-WHERE TENDN = @TENDN AND MATKHAU = @MK
-END;
-GO
-
-EXEC SP_INS_SINHVIEN 'SV01', 'NGUYEN VAN A', '1/1/1990', '280 AN DUONG VUONG', 'CNTT-K35', 'NVA', '123456'
-EXEC SP_INS_SINHVIEN 'SV0432', 'NGUYEN VAN A', '1/1/1990', '280 AN DUONG VUONG', '19MMT', 'asv23', 'a'
-
-EXEC SP_LOGIN_SV 'asv', 'a'
-GO
-
-select * from SINHVIEN
-go
-
-/*
-Yeu cau d
-*/
-
---INSERT INTO NHANVIEN (MANV, HOTEN, EMAIL, LUONG, TENDN, MATKHAU, PUBKEY)
---VALUES ('NV01', 'NGUYEN VAN A', 'nva@yahoo.com', 3000000, 'NVA', 123456, 'NV01');
-
-CREATE PROCEDURE ViewClass @MANV varchar(20)
-AS
-SELECT MALOP, TENLOP FROM LOP
-WHERE MANV = @MANV
-GO
-
-EXEC ViewClass @MANV = 'a'
-go
-
--- BUG: XET THEM DIEU KIEN LOP THUOC QUYEN CUA NV HAY KHONG?
--- SOLVED
-CREATE PROCEDURE UpdateClass @MALOP varchar(20), @TENLOP nvarchar(100), @MANV varchar(20)
-AS
+	-- thay doi thong tin nhan vien
+create procedure SP_UPD_NHANVIEN @MANV varchar(20),
+								 @HOTEN nvarchar(100),
+								 @EMAIL varchar(20),
+								 @LUONG VARCHAR(100),
+								 @TENDN nvarchar(100),
+								 @MATKHAU VARCHAR(100),
+								 @PUBKEY varchar(20)
+as
 begin
-	UPDATE LOP
-	SET TENLOP = @TENLOP
-	WHERE @MALOP = MALOP and @MANV = MANV
+	update NHANVIEN
+	set HOTEN = @HOTEN,
+		EMAIL = @EMAIL,
+		LUONG = @LUONG,
+		TENDN = @TENDN,
+		MATKHAU = @MATKHAU,
+		PUBKEY = @PUBKEY
+	where @MANV = MANV
 end;
-GO
-
-EXEC UpdateClass @MALOP = '19MMT', @TENLOP = 'BM CSDL3', @MANV = 'a'
 go
 
-CREATE PROCEDURE AddClass @MALOP varchar(20), @TENLOP nvarchar(100), @MANV varchar(20) = NULL
-AS
+SP_UPD_NHANVIEN @MANV = 'a2',
+								 @HOTEN ='NVAA riu',
+								 @EMAIL = 'NVA@1',
+								 @LUONG = 'wRFEUEoI3b37mhmNChNXsQ==',
+								 @TENDN = 'a2new',
+								 @MATKHAU = '0cc175b9c0f1b6a831c399e269772661',
+								 @PUBKEY = 'PUBKEY'
+GO
+
+--- MAN HINH QUAN LI LOP
+	-- xem lop
+create procedure SP_SEL_LOP @MANV varchar(20)
+as
 begin
-	INSERT INTO LOP (MALOP, TENLOP, MANV)
-	VALUES
+		SELECT * FROM LOP
+		WHERE MANV=@MANV
+end;
+go
+
+EXEC SP_SEL_LOP 'a'
+GO
+	-- them lop 
+create procedure SP_INS_LOP @MALOP varchar(20),
+							@TENLOP nvarchar(100),
+							@MANV varchar(20)
+as
+begin
+		insert into LOP(MALOP, TENLOP, MANV)
+		values
 		(@MALOP, @TENLOP, @MANV)
 end;
-GO
-
-EXEC AddClass @MALOP = '19MMT', @TENLOP = 'Bao mat CSDL', @MANV = 'a'
 go
 
-CREATE PROCEDURE DeleteClass @MANV varchar(20), @MALOP varchar(20)
-AS
+EXEC SP_INS_LOP @MALOP='19MMT', @TENLOP='BMCSDL', @MANV='a'
+GO
+
+	-- xoa lop hoc
+create procedure SP_DEL_LOP @MALOP varchar(20)
+as
 begin
-	DELETE FROM LOP
-	WHERE MALOP = @MALOP AND MANV = @MANV
+	delete from LOP
+	where @MALOP = MALOP
 end;
-GO
-
---EXEC DeleteClass @MANV = 'a', @MALOP = '19MMT'
 go
 
-
-CREATE PROCEDURE ViewSV @MALOP varchar(20)
-AS
+	-- thay doi thong tin lop hoc
+create procedure SP_UPD_LOP @MALOP varchar(20),
+							@TENLOP nvarchar(100),
+							@MANV varchar(20)
+as
 begin
-	SELECT MASV, HOTEN, NGAYSINH, DIACHI, MALOP, TENDN
-	FROM SINHVIEN
-	WHERE MALOP = @MALOP
+	update LOP
+	set TENLOP = @TENLOP
+	where @MANV = MANV
 end;
-GO
-
-EXEC ViewSV @MALOP = '19MMT'
 go
 
--- BUG
--- solved
-CREATE PROCEDURE UpdateSV @MANV varchar(20),
-						  @MASV nvarchar(20), 
-						  @HOTEN nvarchar(100), 
-						  @NGAYSINH datetime, 
-						  @DIACHI nvarchar(200), 
-						  @MALOP varchar(20), 
-						  @TENDN nvarchar(100), 
-						  @MATKHAU varchar(100)
-AS
-BEGIN
-	Declare @MK VARBINARY(MAX)
-	SELECT @MK = HASHBYTES('MD5', @MATKHAU)
+--- MAN HINH QUAN LI SINH VIEN
 
-	UPDATE SINHVIEN
-	SET HOTEN = @HOTEN, NGAYSINH = @NGAYSINH, DIACHI = @DIACHI, TENDN = @TENDN, MATKHAU = @MK
-	FROM SINHVIEN SV, LOP
-	WHERE SV.MASV = @MASV and LOP.MANV = @MANV and LOP.MALOP = @MALOP
-END;
-GO
-
-EXEC UpdateSV 'NV01', 'SV0432', 'Huynh Van C', '1-1-2001', 'TRAN HUNG DAO', '19MMT', 'HVC', 'ABC'
+	-- select danh sach sinh vien thuoc lop nhan vien quan li
+create procedure SP_SEL_SINHVIEN @MALOP VARCHAR(20),
+								 @MANV varchar(20)
+as
+begin
+	SELECT SV.MASV, SV.HOTEN, SV.NGAYSINH, SV.DIACHI, SV.MALOP, SV.TENDN
+	FROM SINHVIEN SV, LOP L, NHANVIEN NV
+	WHERE SV.MALOP = L.MALOP AND L.MANV=NV.MANV
+end;
 go
 
--- XET THEM DIEU KIEN LOP THUOC QUYEN CUA NV HAY KHONG? 
--- solved
-CREATE PROCEDURE AddSV (@MASV NVARCHAR(20),
-						@HOTEN NVARCHAR(100),
-						@NGAYSINH DATETIME,
-						@DIACHI NVARCHAR(200),
-						@MALOP NVARCHAR(20),
-						@TENDN NVARCHAR(100),
-						@MATKHAU VARCHAR(100),
-						@MANV VARCHAR(20))
-AS
-BEGIN
+EXEC SP_SEL_SINHVIEN '19MMT', 'a'
+GO
+
+	-- xoa sinh vien thuoc lop nhan vien quan li
+create procedure SP_DEL_SINHVIEN @MASV varchar(20),
+								 @MANV varchar(20)
+as
+begin
+	delete SV
+	from SINHVIEN SV, LOP
+	where @MASV = MASV and SV.MALOP = LOP.MALOP and @MANV = LOP.MANV
+end;
+go
+
+	-- thay đổi thông tin sv thuộc lớp nhân viên quản lí
+create procedure SP_UPD_SINHVIEN @MASV VARCHAR(20),
+								 @HOTEN NVARCHAR(100),
+								 @NGAYSINH DATETIME,
+								 @DIACHI NVARCHAR(200),
+								 @MALOP VARCHAR(20),
+								 @TENDN NVARCHAR(100),
+								 @MATKHAU VARCHAR(100),
+								 @MANV varchar(20)
+as
+begin
+	update SV
+	set HOTEN = @HOTEN,
+		NGAYSINH = @NGAYSINH,
+		DIACHI = @DIACHI,
+		MALOP = @MALOP,
+		TENDN = @TENDN,
+		MATKHAU = @MATKHAU
+	from SINHVIEN SV, LOP
+	where @MASV = SV.MASV and SV.MALOP = LOP.MALOP and @MALOP = LOP.MALOP and @MANV = LOP.MANV
+end;
+go
+
+EXEC SP_UPD_SINHVIEN 'a5','a5new','07/07/2001','NVC','19MMT','sv5','0cc175b9c0f1b6a831c399e269772661','a'
+GO
+
+	-- nhập bảng điểm của từng sinh viên, cột điểm thi được mã hóa bằng public key của nhân viên (đã đăng nhập)
+create procedure SP_INS_DIEM_SINHVIEN @MASV varchar(20),
+									  @MAHP VARCHAR (20),
+									  @DIEMTHI VARBINARY(max),
+									  @MANV varchar(20)
+as
+begin
 	if exists
 	(
-		select * from LOP 
-		where MALOP = @MALOP and MANV = @MANV
+		select * 
+		from SINHVIEN SV, LOP
+		where @MASV = SV.MASV and SV.MALOP = LOP.MALOP and @MANV = LOP.MANV
 	)
-    INSERT INTO SINHVIEN (MASV, HOTEN, NGAYSINH, DIACHI, MALOP, TENDN, MATKHAU)
-    VALUES
-    (
-        @MASV, @HOTEN, @NGAYSINH, @DIACHI, @MALOP, @TENDN, HASHBYTES('MD5', @MATKHAU)
-    )
-END;
-GO
-
-EXEC AddSV @MASV = 'SV04', @HOTEN = 'Huynh Van C', @NGAYSINH = '1-1-2001', @DIACHI = '123 TRAN HUNG DAO', @MALOP = '19MMT', @TENDN = 'svtes2t', @MATKHAU = 'a', @MANV = 'a'
+		insert into BANGDIEM(MASV, MAHP, DIEMTHI)
+		values
+		(@MASV, @MAHP, @DIEMTHI)
+	else
+		Print 'Error'
+end;
 go
 
--- BUG THIEU LOP HOC? (DELETE SINH VIEN TRONG BANG SINHVIEN THUOC LOP QUY DINH)
--- solved
-CREATE PROCEDURE DeleteSV @MANV varchar(20), 
-						  @MASV nvarchar(20), 
-						  @MALOP varchar(20)
-AS
+	-- update bang diem cua sinh vien
+create procedure SP_UPD_DIEM_SINHVIEN @MASV varchar(20),
+									  @MAHP VARCHAR(20),
+									  @DIEMTHI VARBINARY(max),
+									  @MANV varchar(20)
+as
 begin
-	DELETE SV
-	FROM SINHVIEN SV, LOP
-	WHERE SV.MASV = @MASV AND MANV = @MANV and SV.MALOP = @MALOP
+	update BD
+	set BD.DIEMTHI = @DIEMTHI
+	from SINHVIEN SV, LOP, BANGDIEM BD
+	where @MAHP = BD.MAHP and @MASV = BD.MASV and @MASV = SV.MASV and SV.MALOP = LOP.MALOP and @MANV = LOP.MANV
 end;
-GO
-
--- UNENCRYPTED POINT?
-CREATE PROCEDURE AddPoints @MASV varchar(20) = NULL, 
-						   @MAHP varchar(20) = NULL, 
-						   @DIEMTHI varbinary = NULL
-AS
-begin
-	INSERT INTO BANGDIEM (MASV, MAHP, DIEMTHI)
-	VALUES (@MASV, @MAHP, @DIEMTHI)
-end;
-GO
-
-EXEC AddPoints @MASV = '19127001', @MAHP = 'CSC10001', @DIEMTHI = 8 
 go
 
--- Uncompleted (DEPEND ON DECRYPT BY NV's KEY)
-CREATE PROCEDURE ViewPoints @MASV varchar(20) = NULL, @MAHP varchar(20) = NULL, @DIEMTHI varbinary = NULL
-AS
-INSERT INTO BANGDIEM (MASV, MAHP, DIEMTHI)
-VALUES (@MASV, @MAHP, @DIEMTHI)
-GO
+	-- xoa bang diem cua sinh vien
+create procedure SP_DEL_DIEM_SINHVIEN @MASV varchar(20),
+									  @MAHP VARCHAR(20),
+									  @MANV varchar(20)
+as
+begin
+	delete BD 
+	from BANGDIEM BD, SINHVIEN SV, LOP
+	where @MASV = BD.MASV and @MAHP = BD.MAHP and @MASV = SV.MASV and SV.MALOP = LOP.MALOP and @MANV = LOP.MANV
+end;
+go
