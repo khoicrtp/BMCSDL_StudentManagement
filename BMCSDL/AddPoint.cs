@@ -111,6 +111,20 @@ namespace BMCSDL
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             dt = new DataTable();
             da.Fill(dt);
+
+            foreach (DataRow dataRow in this.dt.Rows)
+            {
+                foreach (var item in dataRow.ItemArray)
+                {
+                    Console.WriteLine(item);
+                }
+            }
+
+            for (int i = 0; i < this.dt.Rows.Count; i++)
+            {
+                this.dt.Rows[i][2] = Decrypt256((this.dt.Rows[i][2]).ToString());
+            }
+
             dataGridView1.DataSource = dt;
             cmd.ExecuteNonQuery();
             cnn.Close();
