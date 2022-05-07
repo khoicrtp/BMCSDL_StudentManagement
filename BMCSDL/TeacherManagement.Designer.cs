@@ -44,10 +44,10 @@
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
+            this.button4 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -194,16 +194,6 @@
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(582, 458);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(93, 51);
-            this.button4.TabIndex = 16;
-            this.button4.Text = "Save";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
-            // 
             // button5
             // 
             this.button5.Location = new System.Drawing.Point(737, 458);
@@ -230,10 +220,20 @@
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
             this.label7.Location = new System.Drawing.Point(405, 9);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(208, 39);
+            this.label7.Size = new System.Drawing.Size(198, 38);
             this.label7.TabIndex = 19;
             this.label7.Text = "STAFF LIST";
             this.label7.Click += new System.EventHandler(this.label7_Click);
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(582, 458);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(93, 51);
+            this.button4.TabIndex = 16;
+            this.button4.Text = "Save";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // TeacherManagement
             // 
@@ -287,9 +287,9 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Button button4;
     }
 }

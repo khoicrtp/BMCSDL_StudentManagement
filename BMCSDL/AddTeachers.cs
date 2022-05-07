@@ -97,7 +97,7 @@ namespace BMCSDL
             {
                 string connetionString;
                 SqlConnection cnn;
-                connetionString = @"Data Source=.;Initial Catalog=QLSV;Integrated Security=True;";
+                connetionString = @"Data Source=.;Initial Catalog=QLSVNhom;Integrated Security=True;";
                 cnn = new SqlConnection(connetionString);
                 cnn.Open();
 

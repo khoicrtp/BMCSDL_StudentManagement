@@ -89,7 +89,7 @@ namespace BMCSDL
             dt = new DataTable();
             string connetionString;
             SqlConnection cnn;
-            connetionString = @"Data Source=.;Initial Catalog=QLSV;Integrated Security=True;";
+            connetionString = @"Data Source=.;Initial Catalog=QLSVNhom;Integrated Security=True;";
             cnn = new SqlConnection(connetionString);
             cnn.Open();
 
@@ -180,7 +180,7 @@ namespace BMCSDL
             {
                 string connetionString;
                 SqlConnection cnn;
-                connetionString = @"Data Source=.;Initial Catalog=QLSV;Integrated Security=True;";
+                connetionString = @"Data Source=.;Initial Catalog=QLSVNhom;Integrated Security=True;";
                 cnn = new SqlConnection(connetionString);
                 cnn.Open();
 
@@ -203,7 +203,55 @@ namespace BMCSDL
 
         private void button3_Click(object sender, EventArgs e)
         {
+            if (textBox1.Text == "" || textBox2.Text == "" || textBox3.Text == "" || textBox4.Text == "" || textBox5.Text == "" || textBox6.Text == "")
+            {
+                MessageBox.Show("Please input all required data");
+            }
+            try
+            {
+                string connetionString;
+                SqlConnection cnn;
+                //connetionString = @"Data Source=DESKTOP-RDCK09P;Initial Catalog=QLSVNhom;User ID=admin;Password=a";
+                connetionString = @"Data Source=.;Initial Catalog=QLSVNhom;Integrated Security=True;";
+                cnn = new SqlConnection(connetionString);
+                cnn.Open();
 
+                String hashedPassword = MD5Hash(textBox6.Text);
+                String encryptedLuong = Encrypt256(textBox5.Text);
+                SqlCommand cmd = new SqlCommand("SP_UPD_NHANVIEN", cnn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new SqlParameter("@MANV", textBox1.Text));
+                cmd.Parameters.Add(new SqlParameter("@HOTEN", textBox4.Text));
+                cmd.Parameters.Add(new SqlParameter("@EMAIL", textBox2.Text));
+                cmd.Parameters.Add(new SqlParameter("@LUONG", encryptedLuong));
+                cmd.Parameters.Add(new SqlParameter("@TENDN", textBox3.Text));
+                cmd.Parameters.Add(new SqlParameter("@PUBKEY", this.PUBKEY));
+                cmd.Parameters.Add(new SqlParameter("@MATKHAU", hashedPassword));
+
+                this.MANV = textBox1.Text;
+                this.HOTEN = textBox4.Text;
+                this.EMAIL = textBox2.Text;
+                this.LUONG = Decrypt256(encryptedLuong);
+                this.TENDN = textBox3.Text;
+                this.MATKHAU = hashedPassword;
+
+                textBox1.Text = MANV;
+                textBox4.Text = HOTEN;
+                textBox2.Text = EMAIL;
+                textBox5.Text = (LUONG);
+                textBox3.Text = TENDN;
+                textBox6.Text = MATKHAU;
+
+                cmd.ExecuteNonQuery();
+                refreshData();
+                MessageBox.Show("Teacher info updated successfully !");
+
+                cnn.Close();
+            }
+            catch
+            {
+                MessageBox.Show("Something went wrong! Please check inputted data!");
+            }
         }
 
         private void button4_Click(object sender, EventArgs e)
